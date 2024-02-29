@@ -35,7 +35,7 @@ public class checkClick : MonoBehaviour
         }
     }
 
-    public void startCheck()// 开始检测
+    public void startCheck()// 开始检测，通过animation事件调用
     {
         isChecking = true;
         elapsedTime = 0.0f;// 重置计时器

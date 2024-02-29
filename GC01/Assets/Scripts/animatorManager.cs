@@ -16,10 +16,19 @@ public class animatorManager : MonoBehaviour
     {
         playerAnimator.SetBool("injured", true);
     }
+    public void defence()// 普通格挡
+    {
+        playerAnimator.SetBool("defence", true);
+    }
     public void endAnimation()// 重置动画状态
     {
         enemyAnimator.SetBool("achieve", false);
         playerAnimator.SetBool("counter", false);
         playerAnimator.SetBool("injured", false);
+    }
+
+    public void endDenfence()
+    {
+        playerAnimator.SetBool("defence", false);
     }
 }

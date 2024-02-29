@@ -26,13 +26,14 @@ public class checkClick : MonoBehaviour
             if (elapsedTime2 > CD)
             {
                 inCD = false;
-                elapsedTime = 0.0f;
+                elapsedTime2 = 0.0f;
             }
         }
         else//冷却完毕
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                manager.defence();
                 inCD = true;
             }
         }
@@ -41,7 +42,7 @@ public class checkClick : MonoBehaviour
         {
             elapsedTime += Time.fixedDeltaTime;// 计时
 
-            if (Input.GetKeyDown(KeyCode.Space) && !inCD)// 判断成功则调用盾反函数并结束检测
+            if (Input.GetKeyDown(KeyCode.Space) && manager.playerAnimator.GetBool("defence"))// 判断成功则调用盾反函数并结束检测
             {
                 manager.counterAttack();
                 endCheck();

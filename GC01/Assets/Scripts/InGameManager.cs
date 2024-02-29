@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InGamePause : MonoBehaviour
+public class InGameManager : MonoBehaviour
 {
     [Header("暂停UI界面")]
     public GameObject pauseMenuUI;
@@ -43,6 +43,6 @@ public class InGamePause : MonoBehaviour
     public void LoadMainMenu()
     {
         Time.timeScale = 1f; // 确保游戏的时间流动恢复正常
-        SceneManager.LoadScene("Main"); // 加载主菜单
+        SceneManager.LoadScene("MainMenu"); // 加载主菜单
     }
 }

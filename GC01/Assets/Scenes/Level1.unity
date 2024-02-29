@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 1945362341}
   - component: {fileID: 1945362340}
   m_Layer: 0
-  m_Name: PauseManager
+  m_Name: InGameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

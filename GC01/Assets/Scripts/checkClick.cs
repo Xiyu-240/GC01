@@ -4,32 +4,52 @@ using UnityEngine;
 
 public class checkClick : MonoBehaviour
 {
+    public animatorManager manager;
+
     private bool isChecking = false;// 判断是否在检测
 
-    public float timerDuration = 1.0f; // 有效时间
-    private float elapsedTime = 0.0f; // 已过时间
+    public float timerDuration = 10f; // 有效时间
+    public float elapsedTime = 0.0f; // 已过时间
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    private bool inCD = false;// 判断是否冷却
 
-    }
+    public float CD = 5f;// 冷却
+    public float elapsedTime2 = 0.0f;// 已过
 
     // Update is called once per frame
     void Update()
     {
+        if (inCD)// 冷却中
+        {
+            elapsedTime2 += Time.fixedDeltaTime;
+
+            if (elapsedTime2 > CD)
+            {
+                inCD = false;
+                elapsedTime2 = 0.0f;
+            }
+        }
+        else//冷却完毕
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                manager.defence();
+                inCD = true;
+            }
+        }
+
         if (isChecking)
         {
-            elapsedTime += Time.deltaTime;// 计时
+            elapsedTime += Time.fixedDeltaTime;// 计时
 
-            if (Input.GetButtonDown("Space"))// 判断成功则调用盾反函数并结束检测
+            if (Input.GetKeyDown(KeyCode.Space) && manager.playerAnimator.GetBool("defence"))// 判断成功则调用盾反函数并结束检测
             {
-                counterAttack();
+                manager.counterAttack();
                 endCheck();
             }
-            else if (elapsedTime>timerDuration)// 若计时大于有效时间，调用受击函数并结束检测
+            else if (elapsedTime > timerDuration)// 若计时大于有效时间，调用受击函数并结束检测
             {
-                underAttack();
+                manager.underAttack();
                 endCheck();
             }
         }
@@ -44,14 +64,6 @@ public class checkClick : MonoBehaviour
     public void endCheck()// 结束检测
     {
         isChecking = false;
-    }
-
-    public void counterAttack()// 盾反函数
-    {
-
-    }
-    public void underAttack()// 受击函数
-    {
-
+        elapsedTime = 0.0f;// 重置计时器
     }
 }

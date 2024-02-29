@@ -6,9 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("选关场景")]
-    public string levels;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -22,11 +20,12 @@ public class GameManager : MonoBehaviour
     }
     public void GameStart()//进入选关
     {
-        SceneManager.LoadScene(levels);//加载选关界面
+        SceneManager.LoadScene("Levels");//加载选关场景
     }
     public void GameExit()//退出游戏
     {
         Application.Quit();
         Debug.Log("退出游戏");
     }
+    
 }

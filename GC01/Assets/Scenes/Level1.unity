@@ -225,11 +225,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Enemy: {fileID: 997287392}
   Player: {fileID: 417847874}
+  playerAnimator: {fileID: 417847878}
   bloodController: {fileID: 417847879}
   attack: 0
   amod: 1
   atime: 0.5
   ctime: 0.5
+  player1: {fileID: 21300000, guid: ef4d3669191908f49b7c93f3dae358d9, type: 3}
+  player2: {fileID: 21300000, guid: 9bffbd8fb7860e34ba04997867f83cb9, type: 3}
+  player3: {fileID: 21300000, guid: 09c6ee8f8b4b87742b44fc22e799e374, type: 3}
+  player4: {fileID: 21300000, guid: e287d710cb114ca48a9a153c6ad9d410, type: 3}
   enemy1: {fileID: 21300000, guid: 40cff1eed4504a747b2988b04c376c56, type: 3}
   enemy2: {fileID: 21300000, guid: dbaaa8bbde7e80c4da9071a4a6ed7e90, type: 3}
   enemy3: {fileID: 21300000, guid: c9e4c094f0bd7bd45b748780d26912e9, type: 3}
@@ -283,7 +288,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -747604219, guid: 144f8b999f930ea4c9c7222c32001add, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 73f1659b889949f46977519e864b05e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -302,7 +307,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 417847874}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.11, y: -1.7, z: 0}
+  m_LocalPosition: {x: -1.4, y: 0.25, z: 0}
   m_LocalScale: {x: 1.2342476, y: 1.2342476, z: 1.2342476}
   m_ConstrainProportionsScale: 0
   m_Children: []

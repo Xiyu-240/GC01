@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour
     public GameObject Enemy;
     public GameObject Player;
 
+    public Animator playerAnimator;
+
     public bloodController bloodController;
 
     public bool attack = false;//启动攻击
@@ -14,7 +16,13 @@ public class GameController : MonoBehaviour
     public float atime = 0.5f;//攻击间隔
     public float ctime = 0.5f;//格挡CD时间
 
-    [Header("敌人攻击图像")]
+    [Header("玩家图像")]
+    public Sprite player1;
+    public Sprite player2;
+    public Sprite player3;
+    public Sprite player4;
+
+    [Header("敌人图像")]
     public Sprite enemy1;
     public Sprite enemy2;
     public Sprite enemy3;
@@ -41,17 +49,20 @@ public class GameController : MonoBehaviour
             counter1 = Time.time;//检测当前时间
             canblock = false;
 
-            if (Mathf.Abs(counter1 - counter0 - 3 * atime) <= 0.3f)
+            if (Mathf.Abs(counter1 - counter0 - 3 * atime) <= 0.25f)
             {
                 rebounded = true;
                 Debug.Log("弹反！");
-                Player.GetComponent<SpriteRenderer>().color = Color.yellow;//播放弹反动画
+                playerAnimator.enabled = false;
+                StartCoroutine(Rebound());
+                //Player.GetComponent<SpriteRenderer>().sprite = player2;//播放弹反动画
                 Invoke("CanBlock", atime);
             }
 
             else
             {
-                Player.GetComponent<SpriteRenderer>().color = Color.black;//播放格挡动画
+                playerAnimator.enabled = false;
+                Player.GetComponent<SpriteRenderer>().sprite = player1;//播放格挡动画
                 Invoke("CanBlock", ctime);
             }
 
@@ -89,16 +100,19 @@ public class GameController : MonoBehaviour
 
     public void PlayerSprite0()//结束格挡/弹反姿势
     {
-        Player.GetComponent<SpriteRenderer>().color = Color.white;//玩家角色变回原样
+        Player.GetComponent<SpriteRenderer>().color = Color.white;
+        playerAnimator.enabled = true;//玩家角色变回原样
     }
 
     public void EnemySprite0()
     {
+
         Enemy.GetComponent<SpriteRenderer>().color = Color.white;
     }
     public void CanBlock()//结束格挡/弹反姿势，重新可以格挡
     {
-        Player.GetComponent<SpriteRenderer>().color = Color.white;//玩家角色变回原样
+        Player.GetComponent<SpriteRenderer>().color = Color.white;
+        playerAnimator.enabled = true;//玩家角色变回原样
         canblock = true;
 
     }
@@ -125,7 +139,15 @@ public class GameController : MonoBehaviour
         StartCoroutine(Attack1());
     }
 
-    private IEnumerator Rebounded()  //弹反动画
+    private IEnumerator Rebound()  //弹反动画
+    {
+        Player.GetComponent<SpriteRenderer>().sprite = player2;
+        yield return new WaitForSeconds(0.15f);
+        Player.GetComponent<SpriteRenderer>().sprite = player3;
+        yield return new WaitForSeconds(0.15f);
+        Player.GetComponent<SpriteRenderer>().sprite = player4;
+    }
+    private IEnumerator Rebounded()  //被弹反动画
     {
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy8;
         yield return new WaitForSeconds(0.15f);
@@ -154,7 +176,7 @@ public class GameController : MonoBehaviour
         if (rebounded == false)//没弹反时
         {
             Player.GetComponent<SpriteRenderer>().color = Color.red;
-            Invoke("PlayerSprite0", atime);
+            Invoke("PlayerSprite0", 0.25f);
 
             if (amod == 1)
             {

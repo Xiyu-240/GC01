@@ -41,7 +41,10 @@ public class GameController : MonoBehaviour
     private bool rebounded = false;//敌人是否对玩家造成伤害
     private bool canblock = true;//是否可格挡
 
-
+    void Start()
+    {
+        AttackLoop();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -71,23 +74,14 @@ public class GameController : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            isGaming++;
-            if (isGaming==1)
-            {
-                AttackLoop();
-            }
-        }
-
         if (bloodController.enemyHP <= 0)// 游戏胜利
         {
-
+            GameObject.Find("InGameManager").GetComponent<InGameManager>().WinGame();
         }
 
         if (bloodController.playerHP <= 0)// 游戏失败
         {
-
+            GameObject.Find("InGameManager").GetComponent<InGameManager>().LoseGame();
         }
 
     }

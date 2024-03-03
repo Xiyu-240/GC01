@@ -7,6 +7,10 @@ public class InGameManager : MonoBehaviour
 {
     [Header("暂停UI界面")]
     public GameObject pauseMenuUI;
+    [Header("胜利UI界面")]
+    public GameObject WinUI;
+    [Header("失败UI界面")]
+    public GameObject LoseUI;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,5 +48,20 @@ public class InGameManager : MonoBehaviour
     {
         Time.timeScale = 1f; // 确保游戏的时间流动恢复正常
         SceneManager.LoadScene("MainMenu"); // 加载主菜单
+    }
+    public void LoadThis()//重玩
+    {
+        Time.timeScale = 1f; // 确保游戏的时间流动恢复正常
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);//重新加载当前场景
+    }
+    public void WinGame()//胜利UI
+    {
+        WinUI.SetActive(true);
+        Time.timeScale = 0f; // 暂停游戏
+    }
+    public void LoseGame()//失败UI
+    {
+        WinUI.SetActive(true);
+        Time.timeScale = 0f; // 暂停游戏
     }
 }

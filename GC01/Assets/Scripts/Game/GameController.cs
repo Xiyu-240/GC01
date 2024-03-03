@@ -74,6 +74,16 @@ public class GameController : MonoBehaviour
             AttackLoop();
         }
 
+        if (bloodController.enemyHP <= 0)// 游戏胜利
+        {
+
+        }
+
+        if (bloodController.playerHP <= 0)// 游戏失败
+        {
+
+        }
+
     }
 
     public void AttackLoop()
@@ -205,25 +215,4 @@ public class GameController : MonoBehaviour
         }
     }
 
-
-
-
-
-    // 暂时不用的
-    public void EnemySprite1()
-    {
-        Enemy.GetComponent<SpriteRenderer>().color = Color.green;//预备动作1
-        Invoke("EnemySprite2", atime);//切到下一动作
-    }
-    public void EnemySprite2()
-    {
-        Enemy.GetComponent<SpriteRenderer>().color = Color.yellow;//预备动作2
-        Invoke("EnemySprite3", atime);//下一动作
-    }
-    public void EnemySprite3()
-    {
-
-        Enemy.GetComponent<SpriteRenderer>().color = Color.red;//攻击命中动作
-        Invoke("Damage", atime);//伤害判定
-    }
 }

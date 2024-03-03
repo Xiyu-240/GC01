@@ -11,10 +11,11 @@ public class GameController : MonoBehaviour
 
     public bloodController bloodController;
 
+    public int isGaming = 0;
     public bool attack = false;//启动攻击
     public int amod = 1;//攻击模式
     public float atime = 0.5f;//攻击间隔
-    public float ctime = 0.5f;//格挡CD时间
+    public float ctime = 2f;//格挡CD时间
 
     [Header("玩家图像")]
     public Sprite player1;
@@ -55,14 +56,15 @@ public class GameController : MonoBehaviour
                 Debug.Log("弹反！");
                 playerAnimator.enabled = false;
                 StartCoroutine(Rebound());
-                //Player.GetComponent<SpriteRenderer>().sprite = player2;//播放弹反动画
-                Invoke("CanBlock", atime);
+                Invoke("PlayerSprite0", atime);
+                Invoke("CanBlock", ctime);
             }
 
             else
             {
                 playerAnimator.enabled = false;
                 Player.GetComponent<SpriteRenderer>().sprite = player1;//播放格挡动画
+                Invoke("PlayerSprite0", atime);
                 Invoke("CanBlock", ctime);
             }
 
@@ -71,7 +73,11 @@ public class GameController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            AttackLoop();
+            isGaming++;
+            if (isGaming==1)
+            {
+                AttackLoop();
+            }
         }
 
         if (bloodController.enemyHP <= 0)// 游戏胜利
@@ -116,15 +122,11 @@ public class GameController : MonoBehaviour
 
     public void EnemySprite0()
     {
-
         Enemy.GetComponent<SpriteRenderer>().color = Color.white;
     }
     public void CanBlock()//结束格挡/弹反姿势，重新可以格挡
     {
-        Player.GetComponent<SpriteRenderer>().color = Color.white;
-        playerAnimator.enabled = true;//玩家角色变回原样
         canblock = true;
-
     }
 
     private IEnumerator Idle1()  //待机动画1
@@ -162,6 +164,7 @@ public class GameController : MonoBehaviour
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy8;
         yield return new WaitForSeconds(0.15f);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy9;
+        Enemy.GetComponent<SpriteRenderer>().color = Color.red;
     }
     private IEnumerator Attack1()  //攻击模式1
     {
@@ -207,7 +210,7 @@ public class GameController : MonoBehaviour
         {
             StartCoroutine(Rebounded());// 弹反动画
 
-            Invoke("EnemySprite0", atime);//变为静止
+            Invoke("EnemySprite0", 0.45f);//变为静止
             bloodController.enemyHP -= Random.Range(5, 16);//怪物扣血
             rebounded = false;
 

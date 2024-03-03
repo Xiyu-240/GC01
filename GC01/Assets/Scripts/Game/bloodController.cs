@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class bloodController : MonoBehaviour
 {
-    public Slider slider;
+    public Slider enemyslider;
+    public Slider playerSlider;
 
     public int enemyHP = 100;
     public int playerHP = 100;
@@ -19,6 +20,7 @@ public class bloodController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        slider.value = enemyHP;
+        enemyslider.value = enemyHP;
+        playerSlider.value = playerHP;
     }    
 }

@@ -22,5 +22,6 @@ public class bloodController : MonoBehaviour
     {
         enemyslider.value = enemyHP;
         playerSlider.value = playerHP;
+        
     }    
 }

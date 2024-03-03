@@ -20,7 +20,7 @@ public class MainMenuManager : MonoBehaviour
     }
     public void GameStart()//进入选关
     {
-        SceneManager.LoadScene("Levels");//加载选关场景
+        SceneManager.LoadScene("Level1");//加载选关场景
     }
     public void GameExit()//退出游戏
     {

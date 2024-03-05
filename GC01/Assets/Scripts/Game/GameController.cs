@@ -7,6 +7,16 @@ public class GameController : MonoBehaviour
     public GameObject Enemy;
     public GameObject Player;
 
+    private AudioSource aES;
+    private AudioSource aS;
+    public AudioClip aParry;
+    public AudioClip aEnemyHurt;
+    public AudioClip aSword0;
+    public AudioClip aSword1;
+    public AudioClip aBlock;
+    public AudioClip aPlayerHurt;
+
+
     public Animator playerAnimator;
 
     public bloodController bloodController;
@@ -41,9 +51,14 @@ public class GameController : MonoBehaviour
     private bool rebounded = false;//敌人是否对玩家造成伤害
     private bool canblock = true;//是否可格挡
 
+    bool isWin=false;
+    bool isLose = false;
+
     void Start()
     {
         AttackLoop();
+        aS=GetComponent<AudioSource>();
+        aES=Enemy.GetComponent<AudioSource>();
     }
     // Update is called once per frame
     void Update()
@@ -53,10 +68,14 @@ public class GameController : MonoBehaviour
             counter1 = Time.time;//检测当前时间
             canblock = false;
 
-            if (Mathf.Abs(counter1 - counter0 - 3 * atime) <= 0.25f)
+            if (Mathf.Abs(counter1 - counter0 - 3 * atime) <= 0.1f)
             {
                 rebounded = true;
                 Debug.Log("弹反！");
+
+                aS.clip = aParry;
+                aS.Play();
+
                 playerAnimator.enabled = false;
                 StartCoroutine(Rebound());
                 Invoke("PlayerSprite0", atime);
@@ -67,6 +86,10 @@ public class GameController : MonoBehaviour
             {
                 playerAnimator.enabled = false;
                 Player.GetComponent<SpriteRenderer>().sprite = player1;//播放格挡动画
+
+                aS.clip = aBlock;
+                aS.Play();
+
                 Invoke("PlayerSprite0", atime);
                 Invoke("CanBlock", ctime);
             }
@@ -74,13 +97,15 @@ public class GameController : MonoBehaviour
 
         }
 
-        if (bloodController.enemyHP <= 0)// 游戏胜利
+        if (bloodController.enemyHP <= 0&&!isWin)// 游戏胜利
         {
+            isWin = true;
             GameObject.Find("InGameManager").GetComponent<InGameManager>().WinGame();
         }
 
-        if (bloodController.playerHP <= 0)// 游戏失败
+        if (bloodController.playerHP <= 0&&!isLose)// 游戏失败
         {
+            isLose = true;
             GameObject.Find("InGameManager").GetComponent<InGameManager>().LoseGame();
         }
 
@@ -88,7 +113,7 @@ public class GameController : MonoBehaviour
 
     public void AttackLoop()
     {
-        int amod = Random.Range(1, 4);//随机出1，2，3中一个数字
+        int amod = Random.Range(1, 6);//随机出1，2，3,4,5中一个数字
 
         Debug.Log(amod);
         if (amod == 1)//普通
@@ -104,6 +129,16 @@ public class GameController : MonoBehaviour
         if (amod == 3)//快
         {
             atime = 0.25f;
+            StartCoroutine(Idle1());
+        }
+        if (amod == 4)//特别慢
+        {
+            atime = 1.5f;
+            StartCoroutine(Idle1());
+        }
+        if (amod == 5)//比较快
+        {
+            atime = 0.375f;
             StartCoroutine(Idle1());
         }
     }
@@ -166,12 +201,24 @@ public class GameController : MonoBehaviour
         //攻击动画
         yield return new WaitForSeconds(atime);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy1;
+
+        aES.clip = aSword1;
+        aES.Play();
+
         //Enemy.GetComponent<SpriteRenderer>().color = Color.green;//预备动作1
         yield return new WaitForSeconds(atime);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy2;
+
+        aES.clip = aSword1;
+        aES.Play();
+
         //Enemy.GetComponent<SpriteRenderer>().color = Color.yellow;//预备动作2
         yield return new WaitForSeconds(atime);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy3;
+
+        aES.clip = aSword0;
+        aES.Play();
+
         //Enemy.GetComponent<SpriteRenderer>().color = Color.red;//攻击命中动作
         yield return new WaitForSeconds(0.2f);
 
@@ -185,6 +232,9 @@ public class GameController : MonoBehaviour
             Player.GetComponent<SpriteRenderer>().color = Color.red;
             Invoke("PlayerSprite0", 0.25f);
 
+            aS.clip = aPlayerHurt;
+            aS.Play();
+
             if (amod == 1)
             {
                 bloodController.playerHP -= Random.Range(30, 41);
@@ -197,6 +247,14 @@ public class GameController : MonoBehaviour
             {
                 bloodController.playerHP -= Random.Range(50, 61);
             }
+            if (amod == 4)
+            {
+                bloodController.playerHP -= Random.Range(60, 71);
+            }
+            if (amod == 5)
+            {
+                bloodController.playerHP -= Random.Range(25, 36);
+            }
 
             AttackLoop();
         }
@@ -204,8 +262,11 @@ public class GameController : MonoBehaviour
         {
             StartCoroutine(Rebounded());// 弹反动画
 
+            aES.clip = aEnemyHurt;
+            aES.Play();
+
             Invoke("EnemySprite0", 0.45f);//变为静止
-            bloodController.enemyHP -= Random.Range(5, 16);//怪物扣血
+            bloodController.enemyHP -= (15-(int)(Mathf.Abs(counter1 - counter0 - 3 * atime) * 150));//怪物扣血
             rebounded = false;
 
             Invoke("AttackLoop", 0.2f);

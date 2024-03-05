@@ -245,15 +245,15 @@ public class GameController : MonoBehaviour
             }
             if (amod == 3)
             {
-                bloodController.playerHP -= Random.Range(50, 61);
+                bloodController.playerHP -= Random.Range(30, 41);
             }
             if (amod == 4)
             {
-                bloodController.playerHP -= Random.Range(60, 71);
+                bloodController.playerHP -= Random.Range(40, 51);
             }
             if (amod == 5)
             {
-                bloodController.playerHP -= Random.Range(25, 36);
+                bloodController.playerHP -= Random.Range(15, 26);
             }
 
             AttackLoop();

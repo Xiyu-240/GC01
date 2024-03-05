@@ -27,11 +27,16 @@ public class GameController : MonoBehaviour
     public float atime = 0.5f;//攻击间隔
     public float ctime = 2f;//格挡CD时间
 
+    [Header("设置")]
+    public float DOD = 0.15f;
+    public int ATK = 20;
+
     [Header("玩家图像")]
     public Sprite player1;
     public Sprite player2;
     public Sprite player3;
     public Sprite player4;
+    public Sprite player5;
 
     [Header("敌人图像")]
     public Sprite enemy1;
@@ -68,7 +73,7 @@ public class GameController : MonoBehaviour
             counter1 = Time.time;//检测当前时间
             canblock = false;
 
-            if (Mathf.Abs(counter1 - counter0 - 3 * atime) <= 0.1f)
+            if (Mathf.Abs(counter1 - counter0 - 3 * atime) <= DOD)
             {
                 rebounded = true;
                 Debug.Log("弹反！");
@@ -97,16 +102,14 @@ public class GameController : MonoBehaviour
 
         }
 
-        if (bloodController.enemyHP <= 0&&!isWin)// 游戏胜利
+        if (bloodController.enemyHP <= 0 && !isWin)// 游戏胜利
         {
-            isWin = true;
-            GameObject.Find("InGameManager").GetComponent<InGameManager>().WinGame();
+            StartCoroutine(EnemyFall());
         }
 
-        if (bloodController.playerHP <= 0&&!isLose)// 游戏失败
+        if (bloodController.playerHP <= 0 && !isLose)// 游戏失败
         {
-            isLose = true;
-            GameObject.Find("InGameManager").GetComponent<InGameManager>().LoseGame();
+            StartCoroutine(PlayerFall());
         }
 
     }
@@ -143,6 +146,25 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private IEnumerator PlayerFall()
+    {
+        Player.GetComponent<SpriteRenderer>().sprite = player5;
+        yield return new WaitForSeconds(0.25f);
+        isLose = true;
+        GameObject.Find("InGameManager").GetComponent<InGameManager>().LoseGame();
+    }
+
+    private IEnumerator EnemyFall()
+    {
+        Enemy.GetComponent<SpriteRenderer>().sprite = enemy10;
+        yield return new WaitForSeconds(0.75f);
+        isWin = true;
+        GameObject.Find("InGameManager").GetComponent<InGameManager>().WinGame();
+    }
+    public void ResetPosition()
+    {
+        Player.transform.position = new Vector2(Player.transform.position.x + 1f, Player.transform.position.y + 0.3f);
+    }
     public void PlayerSprite0()//结束格挡/弹反姿势
     {
         Player.GetComponent<SpriteRenderer>().color = Color.white;
@@ -191,35 +213,32 @@ public class GameController : MonoBehaviour
     private IEnumerator Rebounded()  //被弹反动画
     {
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy8;
+        Enemy.transform.position = new Vector2(Enemy.transform.position.x + 1.5f, Enemy.transform.position.y + 0.3f);
         yield return new WaitForSeconds(0.15f);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy9;
+        Enemy.transform.position = new Vector2(Enemy.transform.position.x - 1.5f, Enemy.transform.position.y - 0.3f);
         Enemy.GetComponent<SpriteRenderer>().color = Color.red;
     }
     private IEnumerator Attack1()  //攻击模式1
     {
         counter0 = Time.time;
+
         //攻击动画
         yield return new WaitForSeconds(atime);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy1;
-
         aES.clip = aSword1;
         aES.Play();
 
-        //Enemy.GetComponent<SpriteRenderer>().color = Color.green;//预备动作1
         yield return new WaitForSeconds(atime);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy2;
-
         aES.clip = aSword1;
         aES.Play();
 
-        //Enemy.GetComponent<SpriteRenderer>().color = Color.yellow;//预备动作2
         yield return new WaitForSeconds(atime);
         Enemy.GetComponent<SpriteRenderer>().sprite = enemy3;
-
         aES.clip = aSword0;
         aES.Play();
 
-        //Enemy.GetComponent<SpriteRenderer>().color = Color.red;//攻击命中动作
         yield return new WaitForSeconds(0.2f);
 
         //判断
@@ -230,7 +249,9 @@ public class GameController : MonoBehaviour
         if (rebounded == false)//没弹反时
         {
             Player.GetComponent<SpriteRenderer>().color = Color.red;
+            Player.transform.position = new Vector2(Player.transform.position.x - 1f, Player.transform.position.y - 0.3f);
             Invoke("PlayerSprite0", 0.25f);
+            Invoke("ResetPosition", 0.25f);
 
             aS.clip = aPlayerHurt;
             aS.Play();
@@ -256,7 +277,7 @@ public class GameController : MonoBehaviour
                 bloodController.playerHP -= Random.Range(15, 26);
             }
 
-            AttackLoop();
+            Invoke("AttackLoop", 0.2f);
         }
         else
         {
@@ -266,7 +287,7 @@ public class GameController : MonoBehaviour
             aES.Play();
 
             Invoke("EnemySprite0", 0.45f);//变为静止
-            bloodController.enemyHP -= (15-(int)(Mathf.Abs(counter1 - counter0 - 3 * atime) * 150));//怪物扣血
+            bloodController.enemyHP -= (ATK - (int)(Mathf.Abs(counter1 - counter0 - 3 * atime) * 150));//怪物扣血
             rebounded = false;
 
             Invoke("AttackLoop", 0.2f);

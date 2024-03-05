@@ -847,10 +847,13 @@ MonoBehaviour:
   amod: 1
   atime: 0.5
   ctime: 0.5
+  DOD: 0.15
+  ATK: 20
   player1: {fileID: 21300000, guid: ef4d3669191908f49b7c93f3dae358d9, type: 3}
   player2: {fileID: 21300000, guid: 9bffbd8fb7860e34ba04997867f83cb9, type: 3}
   player3: {fileID: 21300000, guid: 09c6ee8f8b4b87742b44fc22e799e374, type: 3}
   player4: {fileID: 21300000, guid: e287d710cb114ca48a9a153c6ad9d410, type: 3}
+  player5: {fileID: 486117294, guid: 3b9d61d02df222a4b937ff7160d0168f, type: 3}
   enemy1: {fileID: 21300000, guid: 40cff1eed4504a747b2988b04c376c56, type: 3}
   enemy2: {fileID: 21300000, guid: dbaaa8bbde7e80c4da9071a4a6ed7e90, type: 3}
   enemy3: {fileID: 21300000, guid: c9e4c094f0bd7bd45b748780d26912e9, type: 3}
